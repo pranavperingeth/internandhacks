@@ -8,7 +8,7 @@
 - [x] Phase 4 db
 - [x] Phase 5 filters
 - [x] Phase 6 digest
-- [ ] Phase 7 notifiers
+- [x] Phase 7 notifiers
 - [ ] Phase 8 pipeline/cli
 - [ ] Phase 9 smoke test
 - [ ] Phase 10 scheduling
@@ -17,9 +17,9 @@
 
 ## Latest command output
 ```
-$ pytest tests/test_digest.py -q
-......                                                                   [100%]
-6 passed in 0.01s
+$ NOTIFIER=console python -c "from oppwatch.notifiers import NOTIFIERS; print(NOTIFIERS['console']('hello'))"
+hello
+True
 ```
 
 ## QUESTIONS FOR USER
