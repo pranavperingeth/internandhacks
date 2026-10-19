@@ -12,13 +12,14 @@
 - [x] Phase 8 pipeline/cli
 - [x] Phase 9 smoke test
 - [x] Phase 10 scheduling
-- [ ] Phase 11 LLM (optional)
+- [x] Phase 11 LLM (optional)
 - [ ] Phase 12 README/final
 
 ## Latest command output
 ```
-GitHub Actions workflow configured in .github/workflows/weekly.yml and oppwatch/.github/workflows/weekly.yml.
-Cron schedule: 30 3 * * 1 (Mondays at 09:00 IST).
+$ pytest -q
+...........................................                              [100%]
+43 passed in 0.13s
 ```
 
 ## QUESTIONS FOR USER
