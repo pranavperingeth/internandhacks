@@ -39,8 +39,8 @@ Edit `.env` to configure your notifier and paths:
 NOTIFIER=console
 
 # Telegram settings (if NOTIFIER=telegram)
-TELEGRAM_BOT_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
-TELEGRAM_CHAT_ID=123456789
+TELEGRAM_BOT_TOKEN=your-bot-token-here
+TELEGRAM_CHAT_ID=your-chat-id-here
 
 # Email settings (if NOTIFIER=email)
 SMTP_HOST=smtp.gmail.com
