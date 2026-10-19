@@ -1,0 +1,55 @@
+# Each source: name, type (rss | json_api | html), kind, enabled, plus type-specific keys.
+sources:
+
+  - name: reddit_internships
+    type: rss
+    kind: internship
+    enabled: true
+    url: "https://www.reddit.com/r/internships/new/.rss"
+
+  - name: reddit_hackathons
+    type: rss
+    kind: hackathon
+    enabled: true
+    url: "https://www.reddit.com/r/hackathons/new/.rss"
+
+  - name: devpost
+    type: json_api
+    kind: hackathon
+    enabled: false              # USER: set true after verifying the response shape
+    url: "https://devpost.com/api/hackathons"
+    params: { "status[]": "upcoming", "page": "1" }
+    items_path: "hackathons"    # key in the JSON that holds the list
+    field_map:                  # our field -> path in each item (dot notation)
+      title: "title"
+      url: "url"
+      location: "displayed_location.location"
+      deadline: "submission_period_dates"
+      org: "organization_name"
+
+  - name: github_internship_list
+    type: json_api
+    kind: internship
+    enabled: false              # USER: paste the raw JSON URL of a GitHub internship list
+    url: "PASTE_RAW_JSON_URL_HERE"
+    items_path: ""              # empty string means the JSON root is the list
+    where: { active: true }     # keep only items whose field equals the value
+    field_map:
+      title: "title"
+      url: "url"
+      org: "company_name"
+      location: "locations"     # lists are joined with ", "
+      posted_at: "date_posted"  # epoch seconds are converted to YYYY-MM-DD
+
+  # Template for a site without API or RSS. Only for plain-HTML pages (no JavaScript rendering).
+  - name: example_html_site
+    type: html
+    kind: hackathon
+    enabled: false
+    url: "PASTE_PAGE_URL_HERE"
+    item_selector: "PASTE_CSS_SELECTOR_FOR_ONE_LISTING"
+    fields:                     # CSS selectors relative to one item
+      title: "PASTE_SELECTOR"
+      url: "PASTE_SELECTOR a"   # the href attribute is used
+      org: ""
+      deadline: ""
