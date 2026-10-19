@@ -1,0 +1,34 @@
+kinds: [hackathon, internship]
+
+include_keywords:        # +3 if in title, +1 if in description
+  - software
+  - sde
+  - developer
+  - backend
+  - frontend
+  - full stack
+  - machine learning
+  - ai
+  - data
+  - hackathon
+  - intern
+
+exclude_keywords:        # -5 each, case-insensitive
+  - unpaid
+  - marketing
+  - sales
+  - hr
+  - accounting
+
+preferred_locations:     # +2 if found in location or title
+  - india
+  - remote
+  - bangalore
+  - bengaluru
+  - kerala
+  - online
+
+min_score: 2             # items below this are dropped
+max_age_days: 45         # drop items with posted_at older than this (if posted_at exists)
+drop_past_deadlines: true
+max_items_per_kind_in_digest: 25
