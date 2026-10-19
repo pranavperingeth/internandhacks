@@ -5,7 +5,7 @@
 - [x] Phase 1 models/config
 - [x] Phase 2 net/normalize
 - [x] Phase 3 sources
-- [ ] Phase 4 db
+- [x] Phase 4 db
 - [ ] Phase 5 filters
 - [ ] Phase 6 digest
 - [ ] Phase 7 notifiers
@@ -17,9 +17,9 @@
 
 ## Latest command output
 ```
-$ pytest tests/test_sources.py -q
-.....                                                                    [100%]
-5 passed in 0.09s
+$ pytest tests/test_db.py -q
+...                                                                      [100%]
+3 passed in 0.07s
 ```
 
 ## QUESTIONS FOR USER
