@@ -1,0 +1,28 @@
+{
+  "hackathons": [
+    {
+      "title": "Cloud Hack 2026",
+      "url": "https://devpost.com/hackathons/cloud-hack",
+      "displayed_location": {"location": "Remote"},
+      "submission_period_dates": "2026-12-01",
+      "organization_name": "CloudCorp",
+      "active": true
+    },
+    {
+      "title": "Green Code Challenge",
+      "url": "https://devpost.com/hackathons/green-code",
+      "displayed_location": {"location": "San Francisco, CA"},
+      "submission_period_dates": "2026-11-15",
+      "organization_name": "EcoTech",
+      "active": true
+    },
+    {
+      "title": "Old Hackathon",
+      "url": "https://devpost.com/hackathons/old",
+      "displayed_location": {"location": "Online"},
+      "submission_period_dates": "2025-01-01",
+      "organization_name": "PastCorp",
+      "active": false
+    }
+  ]
+}
