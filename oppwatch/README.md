@@ -148,3 +148,10 @@ A workflow is provided in `.github/workflows/weekly.yml`. In your GitHub reposit
 - **HTTP 429 / 403 (Rate Limiting)**: Websites like Reddit rate-limit frequent requests. The scraper includes backoff retries and sequential delays, but do not run multiple scans within seconds.
 - **HTML source returns empty listings**: Many modern job boards (Unstop, Devfolio, Internshala) render content dynamically via JavaScript. Open DevTools in your browser -> Network tab -> filter "Fetch/XHR", locate the underlying JSON endpoint, and add it as a `json_api` source.
 - **Opportunities not appearing**: Check `config/filters.yaml`. Verify that `min_score` is not too high, or check if an `exclude_keywords` rule matched.
+
+---
+
+## Contributing
+
+Contributions are welcome! Please check out [CONTRIBUTORS.md](CONTRIBUTORS.md) for contribution guidelines, code standards, and how to add new opportunity sources.
+
