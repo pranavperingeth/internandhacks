@@ -1,7 +1,7 @@
 # Progress
 
 ## Checklist
-- [ ] Phase 0 setup
+- [x] Phase 0 setup
 - [ ] Phase 1 models/config
 - [ ] Phase 2 net/normalize
 - [ ] Phase 3 sources
@@ -16,10 +16,16 @@
 - [ ] Phase 12 README/final
 
 ## Latest command output
-(paste real output here)
+```
+$ python -c "import requests, feedparser, bs4, yaml, dotenv; print('ok')"
+ok
+
+$ pytest -q
+no tests ran in 0.01s
+```
 
 ## QUESTIONS FOR USER
-(none)
+- Please open each url in config/sources.yaml in a browser and set enabled: true only for sources that work.
 
 ## BLOCKED
 (none)
