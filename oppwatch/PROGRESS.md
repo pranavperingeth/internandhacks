@@ -9,7 +9,7 @@
 - [x] Phase 5 filters
 - [x] Phase 6 digest
 - [x] Phase 7 notifiers
-- [ ] Phase 8 pipeline/cli
+- [x] Phase 8 pipeline/cli
 - [ ] Phase 9 smoke test
 - [ ] Phase 10 scheduling
 - [ ] Phase 11 LLM (optional)
@@ -17,9 +17,13 @@
 
 ## Latest command output
 ```
-$ NOTIFIER=console python -c "from oppwatch.notifiers import NOTIFIERS; print(NOTIFIERS['console']('hello'))"
-hello
-True
+$ pytest -q
+.......................................                                  [100%]
+39 passed in 0.13s
+
+$ python -m oppwatch list-sources
+reddit_internships (rss)
+reddit_hackathons (rss)
 ```
 
 ## QUESTIONS FOR USER
