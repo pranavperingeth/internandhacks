@@ -2,7 +2,7 @@
 
 ## Checklist
 - [x] Phase 0 setup
-- [ ] Phase 1 models/config
+- [x] Phase 1 models/config
 - [ ] Phase 2 net/normalize
 - [ ] Phase 3 sources
 - [ ] Phase 4 db
@@ -17,11 +17,9 @@
 
 ## Latest command output
 ```
-$ python -c "import requests, feedparser, bs4, yaml, dotenv; print('ok')"
-ok
-
-$ pytest -q
-no tests ran in 0.01s
+$ pytest tests/test_models.py -q
+.....                                                                    [100%]
+5 passed in 0.02s
 ```
 
 ## QUESTIONS FOR USER
