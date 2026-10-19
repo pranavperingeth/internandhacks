@@ -1,0 +1,24 @@
+name: weekly
+on:
+  schedule: [{cron: "30 3 * * 1"}]   # Monday 09:00 IST
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -r oppwatch/requirements.txt
+      - run: python -m oppwatch run
+        working-directory: oppwatch
+        env:
+          NOTIFIER: telegram
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - run: |
+          git config user.name "bot" && git config user.email "bot@example.com"
+          git add -f oppwatch/data/seen.db && git commit -m "update seen db" || echo "no changes"
+          git push
