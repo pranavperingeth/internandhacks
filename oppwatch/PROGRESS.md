@@ -7,7 +7,7 @@
 - [x] Phase 3 sources
 - [x] Phase 4 db
 - [x] Phase 5 filters
-- [ ] Phase 6 digest
+- [x] Phase 6 digest
 - [ ] Phase 7 notifiers
 - [ ] Phase 8 pipeline/cli
 - [ ] Phase 9 smoke test
@@ -17,9 +17,9 @@
 
 ## Latest command output
 ```
-$ pytest tests/test_filters.py -q
-.....                                                                    [100%]
-5 passed in 0.01s
+$ pytest tests/test_digest.py -q
+......                                                                   [100%]
+6 passed in 0.01s
 ```
 
 ## QUESTIONS FOR USER
