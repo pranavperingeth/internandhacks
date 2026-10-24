@@ -29,6 +29,13 @@ def test_to_date_iso_string():
     assert to_date("2026-11-05T10:00:00Z") == "2026-11-05"
 
 
+def test_to_date_range_string():
+    """to_date parses English month ranges and returns deadline YYYY-MM-DD."""
+    assert to_date("Oct 30 - Dec 04, 2026") == "2026-12-04"
+    assert to_date("Nov 02, 2026") == "2026-11-02"
+    assert to_date("Dec 18 - 21, 2026") == "2026-12-21"
+
+
 def test_to_date_garbage():
     """to_date returns None for unparseable input."""
     assert to_date("garbage") is None

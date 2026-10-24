@@ -11,7 +11,7 @@ FIXTURES = Path(__file__).parent / "fixtures"
 
 
 class FakeResponse:
-    """Fake requests.Response for monkeypatching net.get."""
+    """Fake requests.Response for monkeypatching net.get/net.post."""
 
     def __init__(self, content: bytes = b"", text: str = "", json_data=None):
         """Initialize with raw bytes, text, and/or parsed JSON."""
@@ -102,6 +102,26 @@ def test_html_returns_two_with_absolute_urls(monkeypatch):
     assert len(results) == 2
     for r in results:
         assert r.url.startswith("https://example.com/")
+
+
+def test_json_post_and_url_formatting(monkeypatch):
+    """JSON with method: post and url_template/url_prefix formats URLs."""
+    text = '{"items": [{"name": "hack1", "slug": "myhack"}]}'
+    fake = FakeResponse(content=text.encode(), text=text, json_data=json.loads(text))
+    monkeypatch.setattr("oppwatch.sources.json_api.net.post", lambda *a, **kw: fake)
+    cfg = {
+        "name": "post_source",
+        "type": "json_api",
+        "kind": "hackathon",
+        "method": "post",
+        "url": "http://fake.post",
+        "items_path": "items",
+        "url_template": "https://{}.example.com/",
+        "field_map": {"title": "name", "url": "slug"},
+    }
+    results = json_api.fetch(cfg)
+    assert len(results) == 1
+    assert results[0].url == "https://myhack.example.com/"
 
 
 def test_json_missing_items_path_raises(monkeypatch):

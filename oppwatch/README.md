@@ -1,11 +1,12 @@
 # Weekly Opportunity Watcher ("oppwatch")
 
-A lightweight personal CLI program that collects hackathons and internships from RSS feeds, JSON APIs, and HTML pages once a week, deduplicates listings, filters by interest keywords and locations, remembers seen opportunities in a local SQLite database, and delivers a clean digest of new items via Console, Telegram, or Email.
+A lightweight personal CLI program that collects hackathons and internships from RSS feeds, JSON APIs (GET & POST), and HTML pages once a week, deduplicates listings, filters by interest keywords and locations, remembers seen opportunities in a local SQLite database, and delivers a clean digest of new items via Console, Telegram, or Email.
 
 ---
 
 ## Features
-- **Multi-source ingestion**: Supports RSS/Atom feeds, REST JSON endpoints (with nested dot-paths and filters), and plain HTML scraping with CSS selectors.
+- **Multi-source ingestion**: Supports RSS/Atom feeds, REST JSON endpoints (with nested dot-paths, `where` filters, POST support, and URL templates), and HTML scraping with CSS selectors.
+- **Built-in verified sources**: Pre-configured with Devpost (Upcoming & Open), Devfolio (Active Hackathons), Hacker News (Monthly Who is Hiring), Reddit (`r/internships`, `r/hackathon`, `r/csMajors`), and SimplifyJobs.
 - **Deduplication**: Canonicalizes URLs (stripping tracking query params like `utm_*`, `ref`, `fbclid`, etc.) and calculates stable hashes.
 - **Customizable scoring**: Keyword match scoring with whole-word regex, location bonuses, exclude keywords, deadline pruning, and age filtering.
 - **Seen memory**: Tracks notified items in SQLite (`data/seen.db`) so you never get notified twice for the same opportunity.
@@ -68,7 +69,7 @@ python -m oppwatch run
 python -m oppwatch run --dry-run
 
 # Run only a specific source by name
-python -m oppwatch run --only reddit_internships
+python -m oppwatch run --only devpost_upcoming
 
 # List all enabled sources
 python -m oppwatch list-sources
@@ -76,6 +77,23 @@ python -m oppwatch list-sources
 # Reset the seen database
 python -m oppwatch reset-db
 ```
+
+---
+
+## Pre-Configured Sources
+
+The app comes with real, working sources in `config/sources.yaml`:
+
+| Source | Type | Kind | Description |
+|---|---|---|---|
+| `devpost_upcoming` | `json_api` | `hackathon` | Official Devpost Upcoming Hackathons API |
+| `devpost_open` | `json_api` | `hackathon` | Official Devpost Open Hackathons API |
+| `devfolio_open` | `json_api` (POST) | `hackathon` | Devfolio Hackathons API with open applications |
+| `hn_who_is_hiring` | `json_api` | `internship` | Hacker News monthly hiring threads via Algolia |
+| `reddit_internships` | `rss` | `internship` | Reddit r/internships new submissions |
+| `reddit_hackathon` | `rss` | `hackathon` | Reddit r/hackathon new submissions |
+| `reddit_csmajors` | `rss` | `internship` | Reddit r/csMajors new submissions |
+| `simplify_internships` | `json_api` | `internship` | 5,000+ curated internships from SimplifyJobs GitHub (disabled by default) |
 
 ---
 
@@ -92,19 +110,21 @@ Edit `config/sources.yaml`. Add a source under `sources:`.
     url: "https://example.com/feed.xml"
 ```
 
-### 2. JSON API Source
+### 2. JSON API Source (GET or POST)
 ```yaml
   - name: my_api
     type: json_api
     kind: internship
     enabled: true
     url: "https://api.example.com/jobs"
+    method: get                   # get (default) or post
     params: { "role": "intern", "page": "1" }
     items_path: "data.jobs"       # dot path to the items list (empty string for root array)
     where: { "active": true }     # optional: filter items where key == value
+    url_template: "https://example.com/jobs/{}" # optional URL formatting
     field_map:
       title: "job_title"
-      url: "apply_link"
+      url: "slug"
       org: "company.name"
       location: "locations"       # lists are joined with ", "
       deadline: "expires_at"
@@ -146,7 +166,7 @@ A workflow is provided in `.github/workflows/weekly.yml`. In your GitHub reposit
 
 - **Source returned 0 items**: Check `config/sources.yaml` against the real payload. For JSON APIs, verify `items_path` and `field_map` keys match the server's response.
 - **HTTP 429 / 403 (Rate Limiting)**: Websites like Reddit rate-limit frequent requests. The scraper includes backoff retries and sequential delays, but do not run multiple scans within seconds.
-- **HTML source returns empty listings**: Many modern job boards (Unstop, Devfolio, Internshala) render content dynamically via JavaScript. Open DevTools in your browser -> Network tab -> filter "Fetch/XHR", locate the underlying JSON endpoint, and add it as a `json_api` source.
+- **HTML source returns empty listings**: Many modern job boards render content dynamically via JavaScript. Open DevTools in your browser -> Network tab -> filter "Fetch/XHR", locate the underlying JSON endpoint, and add it as a `json_api` source.
 - **Opportunities not appearing**: Check `config/filters.yaml`. Verify that `min_score` is not too high, or check if an `exclude_keywords` rule matched.
 
 ---
@@ -154,4 +174,3 @@ A workflow is provided in `.github/workflows/weekly.yml`. In your GitHub reposit
 ## Contributing
 
 Contributions are welcome! Please check out [CONTRIBUTORS.md](CONTRIBUTORS.md) for contribution guidelines, code standards, and how to add new opportunity sources.
-

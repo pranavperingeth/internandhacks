@@ -1,4 +1,4 @@
-"""JSON API source plugin: fetch structured JSON endpoints."""
+"""JSON API source plugin: fetch structured JSON endpoints (GET or POST)."""
 
 import logging
 from typing import Any
@@ -41,21 +41,35 @@ def fetch(cfg: dict) -> list[Opportunity]:
     items_path = cfg.get("items_path", "")
     field_map = cfg.get("field_map", {})
     where = cfg.get("where", {})
-    resp = net.get(url, params=cfg.get("params"), headers=cfg.get("headers"))
+    method = cfg.get("method", "get").lower()
+
+    if method == "post":
+        json_body = cfg.get("json_body", {})
+        resp = net.post(url, json_body=json_body, headers=cfg.get("headers"))
+    else:
+        resp = net.get(url, params=cfg.get("params"), headers=cfg.get("headers"))
+
     data = resp.json()
     items = get_path(data, items_path)
     if not isinstance(items, list):
         raise ValueError(f"items_path '{items_path}' did not resolve to a list in source '{source}'")
-    # Apply where filter
     if where:
-        items = [item for item in items
-                 if all(item.get(k) == v for k, v in where.items())]
+        items = [item for item in items if all(item.get(k) == v for k, v in where.items())]
+
+    url_template = cfg.get("url_template")
+    url_prefix = cfg.get("url_prefix")
+
     results: list[Opportunity] = []
     for item in items:
         raw: dict[str, Any] = {}
         for our_field, json_path in field_map.items():
             val = get_path(item, json_path)
             raw[our_field] = _extract_value(val)
+        if "url" in raw and raw["url"]:
+            if url_template:
+                raw["url"] = url_template.format(raw["url"])
+            elif url_prefix and not raw["url"].startswith("http"):
+                raw["url"] = url_prefix + raw["url"]
         opp = make_opportunity(raw, kind, source)
         if opp is not None:
             results.append(opp)
